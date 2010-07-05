@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<windows:ToolWindow xmlns:fx="http://ns.adobe.com/mxml/2009" title="Share the current drawing"
+										xmlns:s="library://ns.adobe.com/flex/spark" maxWidth="500"
+										xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:windows="de.karfau.parallelpaint.view.components.tools.windows.*">
+	<fx:Script>
+		<![CDATA[
+			import assets.img.com.yusukekamiyamane.p.FugueIcons;
+
+			import flash.desktop.Clipboard;
+			import flash.desktop.ClipboardFormats;
+
+			protected function btMailto_clickHandler(event:MouseEvent):void
+			{
+				navigateToURL(new URLRequest("mailto:?body="+escape("\nPut yout Text here...\n\n"+currentURL+"\n\ncreated by ParrallelPaint")));
+			}
+
+
+			protected function btCopy_clickHandler(event:MouseEvent):void
+			{
+				var result:Boolean = Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT,currentURL);
+			}
+
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Platzieren Sie nichtvisuelle Elemente (z. B. Dienste, Wertobjekte) hier -->
+		<fx:String id="currentURL">http://parallelpaint.de/</fx:String>
+
+	</fx:Declarations>
+	<windows:layout>
+		<s:VerticalLayout horizontalAlign="center"/>
+	</windows:layout>
+	<mx:Form>
+		<mx:FormItem label="URL:">
+			<s:Label toolTip="the URL of the current drawing" text="{currentURL}" color="#0000FF" textDecoration="underline" />
+		</mx:FormItem>
+		<s:HGroup>
+			<!--TODO: use a skin to display icon in a spark button-->
+			<mx:Button id="btCopy" icon="{FugueIcons.shareToClipboard}" label="Copy to clipboard" click="btCopy_clickHandler(event)"/>
+			<mx:Button id="btMailto" icon="{FugueIcons.shareToMailClient}" label="Send by mail" click="btMailto_clickHandler(event)"/>
+
+		</s:HGroup>
+	</mx:Form>
+
+</windows:ToolWindow>

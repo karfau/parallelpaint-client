@@ -1,0 +1,200 @@
+Version 2.9.4 (June 16, 2010)
+- Add <blue-document-broken> and <blue-document-sticky-note>.
+- Add <blue-folder-broken> and <blue-folder-sticky-note>.
+- Add <document-broken> and <document-sticky-note>.
+- Add <folder-broken> and <folder-sticky-note>.
+- Add <network-status*> and <network-wireless>.
+- Add <notebook-note>.
+- Add <receipt-sticky-note>.
+------------------------------------------------------------
+Version 2.9.3a (May 30, 2010)
+- Add <24/user*>.
+------------------------------------------------------------
+Version 2.9.3 (May 28, 2010)
+- Add <chart-pie*>.
+- Add <plug-connect> and <plug-disconnect*>.
+- Add <sd-memory-card>.
+- Add <24/ui-color-picker*>.
+- Add <24/ui-tab>.
+- Add <24/ui-toolbar>.
+- Add <32/color-swatch>.
+------------------------------------------------------------
+Version 2.9.2 (May 26, 2010)
+- Add <blue-document-xaml>.
+- Add <blue-folder-open-feed>.
+- Add <document-xaml>.
+- Add <folder-open-feed>.
+- Add <24/bookmark-export> and <24/bookmark-import>.
+- Add <24/card-export> and <24/card-import>.
+- Add <24/film>.
+- Add <24/tag-export> and <24/tag-import>.
+- Add <32/film>.
+------------------------------------------------------------
+Version 2.9.1 (May 23, 2010)
+- Add <balloon-buzz*>.
+- Add <24/blue-document*>.
+- Add <32/blue-document*>.
+------------------------------------------------------------
+Version 2.9 (May 20, 2010)
+- Add <blue-document*>.
+- Add <blue-documents*>.
+- Add <document-tree>.
+- Add <folder-tree>.
+- Add <graphic-card>.
+- Add <24/calendar-blue>.
+- Add <32/calendar-blue>.
+- Add <32/keyboard*>.
+- Add <32/layer>.
+- Add <32/notebook>.
+------------------------------------------------------------
+Version 2.8 (May 8, 2010)
+- Add <application-tile*>.
+- Add <asterisk-small-yellow> and <asterisk-yellow>.
+- Add <balloon-white*>.
+- Add <balloons-white>.
+- Add <cup-tea>.
+- Add <drive-disc*>.
+- Add <flag-black>, <flag-blue>, <flag-gray>, <flag-green>,
+  <flag-pink>, <flag-purple>, <flag-white> and
+  <flag-yellow>.
+- Add <new-text>.
+- Add <tag-label-black>, <tag-label-gray>, <tag-label-green>,
+  <tag-label-pink>, <tag-label-purple>, <tag-label-red> and
+  <tag-label-yellow>.
+- Add <32/monitor*>.
+------------------------------------------------------------
+Version 2.7.3c (May 7, 2010)
+- Add <32/balloon>.
+- Add <32/color>.
+- Add <32/database>.
+- Add <32/document-text>.
+- Add <32/exclamation>.
+- Add <32/image*>.
+- Add <32/information>.
+- Add <32/mail>.
+- Add <32/map>.
+- Add <32/minus>.
+- Add <32/plus>.
+- Add <32/receipt*>.
+- Add <32/script*>.
+- Add <32/table>.
+------------------------------------------------------------
+Version 2.7.3b (May 6, 2010)
+- Add <bamboo>.
+- Add <bamboos>.
+- Add <pillow*>.
+- Add <ring>.
+- Add <smiley-eek-blue>, <smiley-roll-blue> and
+  <smiley-sad-blue>.
+- Add <32/application-sidebar*>.
+- Add <32/arrow*>.
+- Add <32/calendar*>.
+- Add <32/clock>.
+------------------------------------------------------------
+Version 2.7.3a (May 3, 2010)
+- Add <24/cross>.
+- Add <24/exclamation>.
+- Add <24/information>.
+- Add <24/server>.
+- Add <24/tick>.
+------------------------------------------------------------
+Version 2.7.3 (May 1, 2010)
+- Add <cushion-gray>.
+- Add <mail-forward*>, <mail-receive>, <mail-reply*> and
+  <mail-send*>.
+- Add <24/minus>.
+- Add <24/plus>.
+------------------------------------------------------------
+Version 2.7.2 (April 28, 2010)
+- Add <chair*>.
+- Add <clipboard-invoice>.
+- Add <cushion>.
+- Add <cutter*>.
+- Add <fruit-grape> and <fruit-lime>.
+- Add <joystick>.
+- Add <toilet>.
+- Add <truck*>.
+------------------------------------------------------------
+Version 2.7.1 (April 26, 2010)
+- Add <blue-folder*>.
+- Add <blue-folders*>.
+- Add <24/blue-folder*>.
+- Add <32/blue-folder*>.
+------------------------------------------------------------
+Version 2.7 (April 25, 2010)
+- Add <balloons-box>, <balloons-facebook-box> and
+  <balloons-twitter-box>.
+- Add <globe-share>.
+- Add <image-share>.
+- Add <mail-share>.
+- Add <map-share>.
+- Add <moneys>.
+- Add <network-firewall>.
+- Add <notebook-share>.
+- Add <plate*>.
+- Add <plates>.
+- Add <receipt-share>.
+- Add <store-share>.
+- Add <table-share>.
+- Add <telephone-share>.
+- Add <terminal-network>.
+- Add <ui-text-field-password-*>.
+- Add <ui-tooltip-balloon-bottom>.
+- Add <user-share>.
+- Add <webcam-share>.
+- Add <zone-label>.
+- Add <24/thumb*>.
+------------------------------------------------------------
+Version 2.6 (March 1, 2010)
+------------------------------------------------------------
+Version 2.5 (January 3, 2010)
+------------------------------------------------------------
+Version 2.4 (November 6, 2009)
+------------------------------------------------------------
+Version 2.3 (October 16, 2009)
+------------------------------------------------------------
+Version 2.2 (July 3, 2009)
+------------------------------------------------------------
+Version 2.1 (June 13, 2009)
+------------------------------------------------------------
+Version 2.0 (May 13, 2009)
+------------------------------------------------------------
+Version 1.9 (May 4, 2009)
+------------------------------------------------------------
+Version 1.8 (April 29, 2009)
+------------------------------------------------------------
+Version 1.7 (April 15, 2009)
+------------------------------------------------------------
+Version 1.6 (April 6, 2009)
+------------------------------------------------------------
+Version 1.5 (March 17, 2009)
+------------------------------------------------------------
+Version 1.4 (January 28, 2009)
+------------------------------------------------------------
+Version 1.3 (January 22, 2009)
+------------------------------------------------------------
+Version 1.2 (January 11, 2009)
+------------------------------------------------------------
+Version 1.1 (January 2, 2009)
+------------------------------------------------------------
+Version 1.0 (October 12, 2008)
+* Initial non-beta release.
+------------------------------------------------------------
+Version 0.9 (August 4, 2008)
+------------------------------------------------------------
+Version 0.8 (July 28, 2008)
+------------------------------------------------------------
+Version 0.7 (July 22, 2008)
+------------------------------------------------------------
+Version 0.6 (July 14, 2008)
+------------------------------------------------------------
+Version 0.5 (July 13, 2008)
+------------------------------------------------------------
+Version 0.4 (July 9, 2008)
+------------------------------------------------------------
+Version 0.3 (June 29, 2008)
+------------------------------------------------------------
+Version 0.2 (June 27, 2008)
+------------------------------------------------------------
+Version 0.1 (June 17, 2008)
+* Initial beta release.

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:layers="de.karfau.parallelpaint.view.components.layers.*"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:tools="de.karfau.parallelpaint.view.components.tools.*"
+	xmlns:windows="de.karfau.parallelpaint.view.components.tools.windows.*"
+	minWidth="200" minHeight="100"
+	creationComplete="creationCompleteHandler(event)"
+	currentState="view">
+
+	<mx:states>
+		<mx:State name="edit"/>
+		<mx:State name="view"/>
+	</mx:states>
+
+	<fx:Script>
+		<![CDATA[
+			import assets.img.com.yusukekamiyamane.p.FugueIcons;
+
+			import de.karfau.parallelpaint.core.elements.*;
+			import de.karfau.parallelpaint.core.elements.style.Fill;
+			import de.karfau.parallelpaint.core.elements.style.Stroke;
+			import de.karfau.parallelpaint.core.tools.*;
+			import de.karfau.parallelpaint.events.AuthenticationEvent;
+			import de.karfau.parallelpaint.events.DrawingEvent;
+			import de.karfau.parallelpaint.events.ElementEvent;
+			import de.karfau.parallelpaint.view.components.tools.ToolButton;
+			import de.karfau.parallelpaint.view.components.tools.windows.*;
+
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+
+			public static const STATE_EDIT:String = "edit";
+			public static const STATE_VIEW:String = "view";
+
+			private const onlyVisibleForUsers:ToolAccess = new ToolAccess(ToolAccess.REQ_USER);
+			private const onlyEnabledForAuthorsOrUsers:ToolAccess = new ToolAccess(ToolAccess.REQ_NOTHING, ToolAccess.REQ_AUTHOR | ToolAccess.REQ_USER);
+
+			protected function creationCompleteHandler (event:FlexEvent):void {
+
+				btNewDrawing.tool = create_EventTool(new DrawingEvent(DrawingEvent.CREATE_DRAWING), "New Drawing", FugueIcons.newDrawing);
+				btExport.tool = create_WindowTool(exportToolWindow, "Export", FugueIcons.exportDrawing);
+				btSnapshot.tool = create_WindowTool(snapshotToolWindow, "Take snapshot", FugueIcons.versions, onlyVisibleForUsers);
+				btShare.tool = create_WindowTool(shareToolWindow, "Share", FugueIcons.share);
+
+				var stickyTool:StickyDrawingTool = new StickyDrawingTool();
+				stickyTool.label = "Pin drawing tools to draw multiple items";
+				stickyTool.access = onlyEnabledForAuthorsOrUsers;
+				stickyTool.icon = FugueIcons.drawSticky;
+				btSticky.tool = stickyTool;
+
+				btDrawLine.tool = create_DrawTool(new Line(null, new Stroke(0x000000, 1, 1)),
+																					"Draw Line", FugueIcons.drawLine);
+				btDrawCircle.tool = create_DrawTool(new Circle(null, new Stroke(0x000000, 1, 1), new Fill(0xFF0000, 0.5)),
+																						"Draw Circle", FugueIcons.drawCircle);
+				btDrawRect.tool = create_DrawTool(new Rect(null, new Stroke(0x000000, 1, 1), new Fill(0xFF0000, 0.5)),
+																					"Draw Rect", FugueIcons.drawRect);
+				btDrawPath.tool = create_DrawTool(new Path(null, new Stroke(0x000000, 1, 1), new Fill(0xFF0000, 0.5)),
+																					"Draw Path", FugueIcons.drawPolyline);
+
+				btShowStyleWindow.tool = create_WindowTool(styleToolWindow, "Style tools", FugueIcons.elemetStyle, onlyEnabledForAuthorsOrUsers);
+
+				btRemoveSelection.tool = create_EventTool(new ElementEvent(ElementEvent.REMOVE_ELEMENT, null),
+																									"Delete Selection", FugueIcons.removeSelectedElement, onlyEnabledForAuthorsOrUsers);
+
+				var notVisibleForUsers:ToolAccess = onlyVisibleForUsers.clone();
+				notVisibleForUsers.reverse = true;
+
+				btShowAuthWindow.tool = create_WindowTool(authToolWindow, "Login/Register", FugueIcons.login, notVisibleForUsers);
+
+				btLogout.tool = create_EventTool(new AuthenticationEvent(AuthenticationEvent.LOGOUT), "Logout", FugueIcons.logout, onlyVisibleForUsers);
+
+			}
+
+			private function create_WindowTool (window:ToolWindow, toolLabel:String, icon:Class, access:ToolAccess=null):ShowWindowTool {
+				var result:ShowWindowTool = new ShowWindowTool(window);
+				result.label = toolLabel;
+				result.icon = icon;
+				result.access = access || ToolAccess.UNLIMITED_ACCESS;
+				return result;
+			}
+
+			private function create_DrawTool (element:IElement, toolLabel:String, icon:Class, access:ToolAccess=null):DrawElementTool {
+				var result:DrawElementTool = new DrawElementTool(element);
+				result.label = toolLabel;
+				result.icon = icon;
+				result.access = access || onlyEnabledForAuthorsOrUsers;
+
+				StickyDrawingTool(btSticky.tool).addTool(result);
+
+				return result;
+			}
+
+			private function create_EventTool (event:Event, toolLabel:String, icon:Class, access:ToolAccess=null):DispatchEventTool {
+				var result:DispatchEventTool = new DispatchEventTool(event);
+				result.label = toolLabel;
+				result.icon = icon;
+				result.access = access || ToolAccess.UNLIMITED_ACCESS;
+				return result;
+			}
+
+			[Bindable]
+			private var statusMessages:ArrayCollection = new ArrayCollection();
+			private var timers:ArrayCollection = new ArrayCollection();
+
+			public function addStatusMessage (message:String):void {
+				var timer:Timer = new Timer(20000);
+				timer.addEventListener(TimerEvent.TIMER, onTimer);
+				timers.addItem(timer);
+				statusMessages.addItem(message);
+				//statusBar.invalidateDisplayList();
+				//statusBar.invalidateSize();
+				timer.start();
+			}
+
+			private function onTimer (event:TimerEvent):void {
+				if (statusMessages.length > 3)
+					statusMessages.removeItemAt(0);
+				Timer(timers.getItemAt(0)).removeEventListener(TimerEvent.TIMER, onTimer);
+				timers.removeItemAt(0);
+			}
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+		<fx:Boolean id="selectionExists"/>
+		<fx:Boolean id="drawingSet"/>
+		<fx:String id="versionDetails"/>
+		<fx:String id="username"/>
+	</fx:Declarations>
+
+	<!--- contains anchors for the ToolWindows. As Popups are brought to front by PopupManager, this can be beneeth all other layers. -->
+	<s:Group id="popupLayer"
+		top="50" bottom="5" left="50" right="5">
+		<s:VGroup right="0" height="95%" verticalCenter="0">
+			<windows:PopUpAnchor top="30" adjustableHeight="true" popUpPosition="left">
+				<windows:StyleToolWindow id="styleToolWindow"/>
+			</windows:PopUpAnchor>
+		</s:VGroup>
+		<windows:PopUpAnchor horizontalCenter="0" verticalCenter="0" popUpPosition="center">
+			<windows:ShareDrawingToolWindow id="shareToolWindow"/>
+		</windows:PopUpAnchor>
+		<windows:PopUpAnchor horizontalCenter="0" verticalCenter="0" popUpPosition="center">
+			<windows:ExportToolWindow id="exportToolWindow"/>
+		</windows:PopUpAnchor>
+		<windows:PopUpAnchor horizontalCenter="0" verticalCenter="0" popUpPosition="center">
+			<windows:SaveSnapshotToolWindow id="snapshotToolWindow"/>
+		</windows:PopUpAnchor>
+
+		<windows:PopUpAnchor horizontalCenter="0" verticalCenter="0" popUpPosition="center">
+			<windows:AuthenticateToolWindow id="authToolWindow"/>
+		</windows:PopUpAnchor>
+	</s:Group>
+
+	<!--TODO: extract messaging to own component, dispatch statusbar-events (configurable?)-->
+	<!--- Responable for displaying the incoming messages. -->
+	<mx:VBox id="statusBar"
+		bottom="5" left="5" right="5" minHeight="500"
+		verticalAlign="bottom">
+		<mx:Repeater id="statusRepeater" dataProvider="{statusMessages}" recycleChildren="true">
+			<s:Label text="{statusRepeater.currentItem}" color="#0000FF"/>
+		</mx:Repeater>
+	</mx:VBox>
+
+	<!--- Responable for displaying the current drawing. -->
+	<layers:DisplayLayer id="displayLayer"
+		top="0" bottom="0" left="0" right="0"/>
+
+	<!--- Responsible for handling Mouse-interactions for drawing/selection etc. -->
+	<layers:InteractionLayer id="interactionLayer"
+		top="0" bottom="0" left="0" right="0"
+		backgroundAlpha=".01" backgroundColor="0xffffff"
+		visible.view="false"/>
+
+	<s:VGroup top="5" left="5" gap="10">
+		<s:HGroup minHeight="30">
+			<tools:ToolButton id="btNewDrawing"/>
+			<s:HGroup paddingBottom="0" paddingLeft="0" paddingTop="0" enabled="{drawingSet}">
+				<tools:ToolButton id="btExport"/>
+				<s:HGroup paddingBottom="0" paddingLeft="0" paddingTop="0" enabled.view="false">
+					<tools:ToolButton id="btSnapshot"/>
+				</s:HGroup>
+				<tools:ToolButton id="btShare"/>
+			</s:HGroup>
+		</s:HGroup>
+		<s:VGroup minWidth="50" visible.view="false">
+			<tools:ToolButton id="btSticky"/>
+			<tools:ToolButton id="btDrawLine"/>
+			<tools:ToolButton id="btDrawCircle"/>
+			<tools:ToolButton id="btDrawRect"/>
+			<tools:ToolButton id="btDrawPath"/>
+			<tools:ToolButton id="btShowStyleWindow"/>
+		</s:VGroup>
+		<s:VGroup minWidth="50" enabled="{selectionExists}" visible.view="false">
+			<tools:ToolButton id="btRemoveSelection"/>
+		</s:VGroup>
+	</s:VGroup>
+
+	<s:HGroup top="5" right="5" verticalAlign="middle">
+		<s:Label id="lblVersionDetails" text="{versionDetails}" includeInLayout="{versionDetails}" visible="{versionDetails}"/>
+		<s:Label id="lblWelcomeUser" text="logged in as {username}" includeInLayout="{username}" visible="{username}"/>
+		<tools:ToolButton id="btShowAuthWindow"/>
+		<tools:ToolButton id="btLogout"/>
+	</s:HGroup>
+</mx:Canvas>

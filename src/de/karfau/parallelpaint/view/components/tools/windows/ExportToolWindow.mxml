@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<windows:ToolWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:s="library://ns.adobe.com/flex/spark" title="Export Drawing"
+	xmlns:windows="de.karfau.parallelpaint.view.components.tools.windows.*">
+
+	<fx:Script>
+		<![CDATA[
+			import de.karfau.parallelpaint.events.ExportEvent;
+		]]>
+	</fx:Script>
+
+	<windows:layout>
+		<s:VerticalLayout horizontalAlign="center"/>
+	</windows:layout>
+
+	<fx:Declarations>
+		<!-- Platzieren Sie nichtvisuelle Elemente (z. B. Dienste, Wertobjekte) hier -->
+		<s:RadioButtonGroup id="rbGroupFormat"/>
+	</fx:Declarations>
+	<mx:Form>
+		<mx:FormItem id="fiBinary" label="as image" direction="vertical">
+			<s:RadioButton id="rbPNG" label="PNG" group="{rbGroupFormat}" value="{ExportEvent.FORMAT_PNG}" selected="true"/>
+			<s:RadioButton id="rbJPG" label="JPG" group="{rbGroupFormat}" value="{ExportEvent.FORMAT_JPG}"/>
+		</mx:FormItem>
+		<s:Label id="lblMessage" text="{message.message}"
+			color="{message.color}"
+			includeInLayout="{message}" visible="{message}"/>
+		<s:HGroup id="btGroup">
+			<s:Button id="btSave" label="Save"/>
+			<s:Button id="btCancel" label="Cancel" click="{closeWindow()}"/>
+		</s:HGroup>
+	</mx:Form>
+</windows:ToolWindow>

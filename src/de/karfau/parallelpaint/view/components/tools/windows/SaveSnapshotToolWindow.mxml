@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<windows:ToolWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:windows="de.karfau.parallelpaint.view.components.tools.windows.*"
+	title="Take snapshot">
+	<windows:layout>
+		<s:VerticalLayout/>
+	</windows:layout>
+
+	<fx:Script>
+		<![CDATA[
+			public override function reset ():void {
+				if (tiVersionTag)
+					tiVersionTag.text = null;
+				super.reset();
+			}
+		]]>
+	</fx:Script>
+
+	<fx:Declarations>
+
+	</fx:Declarations>
+	<mx:Form>
+		<!--		<s:Label width="100%"
+				 Text="You can take snapshots of the current version of the drawing.&lt;br/gt;These snapshots are not editable and each snapshot has its own url."
+				 maxDisplayedLines="5"/>-->
+		<s:RichText
+			text="You can take snapshots of the current version of the drawing.&#xd;These snapshots are not editable and each snapshot has its own url."
+			width="100%"
+			textAlign="center" verticalAlign="top"/>
+		<mx:FormItem label="Additional info or label for this snapshot:">
+			<s:TextInput id="tiVersionTag" width="300"/>
+		</mx:FormItem>
+		<s:Label text="{message.message}" width="100%" color="{message.color}" textAlign="center"/>
+		<s:HGroup width="100%" horizontalAlign="center" gap="20">
+			<s:Button id="btTakeSnapshot" label="Take snapshot"/>
+			<s:Button label="Cancel" click="{closeWindow()}"/>
+		</s:HGroup>
+
+	</mx:Form>
+</windows:ToolWindow>

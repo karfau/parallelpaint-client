@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<windows:ToolWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:windows="de.karfau.parallelpaint.view.components.tools.windows.*"
+	top="5" minWidth="{strokeStyleGroup.width}" minHeight="0"
+	horizontalCenter="0"
+	close="closeHandler(event)" dropShadowVisible="false" title="Style">
+	<windows:layout>
+		<s:VerticalLayout/>
+	</windows:layout>
+	<fx:Metadata>
+		//[Event(name="strokeChange",type="de.karfau.parallelpaint.events.ElementStyleEvent")]
+		[Event(name="strokeStyleChanged",type="de.karfau.parallelpaint.events.ElementStyleEvent")]
+		[Event(name="fillStyleChanged",type="de.karfau.parallelpaint.events.ElementStyleEvent")]
+	</fx:Metadata>
+
+	<fx:Declarations>
+		<mx:NumberFormatter id="numberFormatter_2" precision="2" rounding="nearest"/>
+	</fx:Declarations>
+
+	<fx:Script>
+		<![CDATA[
+			import de.karfau.flexlogplus.*;
+			import de.karfau.parallelpaint.core.elements.style.*;
+			import de.karfau.parallelpaint.events.ElementStyleEvent;
+
+			import mx.events.CloseEvent;
+
+			//set this to true initially makes the component build in the right size
+			[Bindable]
+			public var displayStrokeOptions:Boolean = true;
+			[Bindable]
+			public var displayFillOptions:Boolean = true;
+
+			private var _stroke:IStrokeStyle;
+
+			private var _fill:IFillStyle;
+
+
+			[Bindable]
+			public function get stroke():IStrokeStyle
+			{
+				return _stroke;
+			}
+
+			public function set stroke(value:IStrokeStyle):void
+			{
+				verbose(this,".set stroke({0}) ",value);
+				_stroke = value;
+			}
+
+			[Bindable]
+			public function get fill():IFillStyle
+			{
+				return _fill;
+			}
+
+			public function set fill(value:IFillStyle):void
+			{
+				verbose(this,".set fill({0}) ",value);
+				_fill = value;
+			}
+
+			protected function strokeChangeHandler (event:Event):void {
+				var newStroke:Stroke;
+
+				if (stroke) {
+					newStroke = Stroke(stroke.clone());
+					newStroke.width = round(strokeWidth.value);
+					newStroke.color = strokeColor.selectedColor;
+					newStroke.alpha = round(strokeAlpha.value);
+				} else {
+					newStroke = new Stroke(strokeColor.selectedColor, round(strokeAlpha.value), round(strokeWidth.value));
+				}
+				this.stroke = newStroke;
+				dispatchEvent(new ElementStyleEvent(ElementStyleEvent.CHANGE_STROKE_STYLE, newStroke));
+			}
+
+			protected function fillChangeHandler (event:Event):void {
+				var newFill:Fill;
+
+				if (fill) {
+					newFill = Fill(fill.clone());
+					newFill.color = fillColor.selectedColor;
+					newFill.alpha = round(fillAlpha.value);
+				} else {
+					newFill = new Fill(fillColor.selectedColor, round(fillAlpha.value));
+				}
+				this.fill = newFill;
+				dispatchEvent(new ElementStyleEvent(ElementStyleEvent.CHANGE_FILL_STYLE, newFill));
+			}
+
+			protected function closeHandler (event:CloseEvent):void {
+				//stroke = null;
+			}
+
+			private function round (value:Number, precision:Number=2):Number {
+				var factor:int = Math.pow(10, precision);
+				var result:Number = Math.round(value * factor) / factor;
+				return result;
+			}
+		]]>
+	</fx:Script>
+	<s:VGroup id="strokeStyleGroup"
+		paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
+		includeInLayout="{displayStrokeOptions}" visible="{displayStrokeOptions}">
+
+		<s:Label text="stroke " fontWeight="bold"/>
+		<mx:FormItem label=" -width:">
+			<s:NumericStepper id="strokeWidth"
+				minWidth="60" maxWidth="60"
+				change="strokeChangeHandler(event)"
+				maximum="{stroke.width+100}" minimum="0" stepSize="0.25" value="{stroke.width}"/>
+		</mx:FormItem>
+		<mx:FormItem label=" -color:">
+			<mx:ColorPicker id="strokeColor" width="{strokeWidth.width}" change="strokeChangeHandler(event)" selectedColor="{stroke.color}"/>
+		</mx:FormItem>
+		<mx:FormItem label=" -alpha:">
+			<s:NumericStepper id="strokeAlpha"
+				width="{strokeWidth.width}"
+				change="strokeChangeHandler(event)"
+				maximum="1" minimum="0" stepSize="0.05" value="{stroke.alpha}"/>
+		</mx:FormItem>
+
+	</s:VGroup>
+	<s:VGroup id="fillStyleGroup"
+		paddingBottom="5" paddingLeft="5" paddingRight="5" paddingTop="5"
+		includeInLayout="{displayFillOptions}" visible="{displayFillOptions}">
+
+		<s:Label text="fill " fontWeight="bold"/>
+		<mx:FormItem label=" -color:">
+			<mx:ColorPicker id="fillColor" width="{fillAlpha.width}" change="fillChangeHandler(event)" selectedColor="{fill.color}"/>
+		</mx:FormItem>
+		<mx:FormItem label=" -alpha:">
+			<s:NumericStepper id="fillAlpha"
+				minWidth="60" maxWidth="60"
+				change="fillChangeHandler(event)"
+				maximum="1" minimum="0" stepSize="0.05" value="{fill.alpha}"/>
+		</mx:FormItem>
+
+	</s:VGroup>
+
+</windows:ToolWindow>

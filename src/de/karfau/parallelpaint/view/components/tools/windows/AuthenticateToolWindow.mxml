@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<windows:ToolWindow xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	xmlns:windows="de.karfau.parallelpaint.view.components.tools.windows.*"
+	currentState="login" title="Login or Register">
+
+	<fx:Script>
+		<![CDATA[
+			import de.karfau.flexlogplus.*;
+			import de.karfau.parallelpaint.events.AuthenticationEvent;
+			import de.karfau.parallelpaint.model.vo.User;
+			
+			import mx.events.CloseEvent;
+			
+			import spark.events.TextOperationEvent;
+			
+			/*########################################################*/
+			/*                                                        */
+			/*   OVERRIDE / IMPLEMENT                                 */
+			/*                                                        */
+			/*########################################################*/
+			
+			override public function reset ():void {
+				username = null;
+				password = null;
+				if (tiRepeat)
+					tiRepeat.text = null;
+				registerMail = null;
+				super.reset();
+			}
+			
+			public function validate ():Boolean {
+				var result:Boolean = true;
+				switch (currentState) {
+					case state_register.name:
+						result = result && password == tiRepeat.text;
+						result = result && Boolean(registerMail);
+					case state_login.name:
+						result = result && Boolean(password);
+						result = result && Boolean(username);
+				
+				}
+				validData = result;
+				trace(this, ".validate( ) result: {0}", result);
+				return result;
+			}
+			
+			public function showLogin ():void {
+				currentState = state_login.name;
+			}
+			
+			public function showRegister ():void {
+				currentState = state_register.name;
+			}
+			
+			/*########################################################*/
+			/*                                                        */
+			/*   EVENT-HANDLER                                        */
+			/*                                                        */
+			/*########################################################*/
+			
+			protected function ti_changeHandler (event:TextOperationEvent):void {
+				validate();
+			}
+			
+			protected function ti_keyUpHandler (event:KeyboardEvent):void {
+				switch (event.keyCode) {
+					case Keyboard.ESCAPE:
+						closeWindow();
+						break;
+				}
+			}
+			
+			/*########################################################*/
+			/*                                                        */
+			/*  PRIVATE HELPER/UTIL                                   */
+			/*                                                        */
+			/*########################################################*/
+			
+			[Bindable]
+			protected var validData:Boolean = false;
+			
+			private function dispatch (type:String):void {
+				dispatchEvent(new Event(type));
+			}
+			
+			public function get validUser ():User {
+				if (validate())
+					return new User(username, password, registerMail);
+				return null;
+			}
+			
+			[Bindable]
+			public var autoLogin:Boolean = false;
+			[Bindable]
+			public var username:String;
+			[Bindable]
+			public var password:String;
+			[Bindable]
+			public var registerMail:String;
+		]]>
+	</fx:Script>
+
+	<windows:states>
+		<s:State id="state_login" name="login"/>
+		<s:State id="state_register" name="register"/>
+		<!--<s:State id="state_logout" name="logout"/>-->
+	</windows:states>
+	<windows:layout>
+		<s:VerticalLayout/>
+	</windows:layout>
+
+	<fx:Declarations>
+		<!-- Platzieren Sie nichtvisuelle Elemente (z. B. Dienste, Wertobjekte) hier -->
+	</fx:Declarations>
+	<mx:Form id="formLogin" defaultButton.login="{btLogin}" defaultButton.register="{btRegister}">
+		<mx:FormItem label="username:">
+			<s:TextInput id="tiUsername" text="@{username}" change="{ti_changeHandler(event)}" keyUp="{ti_keyUpHandler(event)}"/>
+		</mx:FormItem>
+		<mx:FormItem label="password:">
+			<s:TextInput id="tiPassword" text="@{password}"
+				change="{ti_changeHandler(event)}" keyUp="{ti_keyUpHandler(event)}"
+				displayAsPassword="true"/>
+		</mx:FormItem>
+		<mx:FormItem label="repeat:" includeIn="register">
+			<s:TextInput id="tiRepeat" change="{ti_changeHandler(event)}" keyUp="{ti_keyUpHandler(event)}" displayAsPassword="true"/>
+		</mx:FormItem>
+		<mx:FormItem label="email:" includeIn="register">
+			<s:TextInput id="tiRegisterMail" text="@{registerMail}" change="{ti_changeHandler(event)}" keyUp="{ti_keyUpHandler(event)}"/>
+		</mx:FormItem>
+		<s:VGroup id="formButtonLayout" horizontalAlign="center" horizontalCenter="0">
+			<!--<s:CheckBox id="cbAutoLogin" label="auto-login"
+				enabled="false" includeIn="login" selected="@{autoLogin}" toolTip="auto-login can only be used for one computer"/>-->
+			<!--- @private -->
+			<s:Label id="lblMessage" text="{message.message}"
+				color="{message.color}"
+				includeInLayout="{message}" visible="{message}"/>
+			<s:HGroup minHeight="0">
+				<!-- excludeFrom="logout"-->
+				<s:Button id="btLogin" label="Login"
+					click.login="{dispatch(AuthenticationEvent.LOGIN)}" click.register="{currentState=state_login.name}"
+					enabled.login="{validData}" enabled.register="true"/>
+				<s:Button id="btRegister" label="Register"
+					click.login="{currentState=state_register.name}" click.register="{dispatch(AuthenticationEvent.REGISTER)}"
+					enabled.login="true" enabled.register="{validData}"/>
+				<s:Button id="btCancel" label="Cancel" click="{closeWindow()}"/>
+			</s:HGroup>
+			<!--<s:HGroup horizontalCenter="0" includeIn="logout">
+					 <s:Button id="btLogout" label="Logout" click.logout="{dispatchAuthEvent(AuthenticationEvent.LOGOUT)}"/>
+					 </s:HGroup>-->
+		</s:VGroup>
+	</mx:Form>
+</windows:ToolWindow>

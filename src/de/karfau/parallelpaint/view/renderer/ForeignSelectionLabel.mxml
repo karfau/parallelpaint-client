@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HGroup xmlns:elements="de.karfau.parallelpaint.core.elements.*"
+	xmlns:fx="http://ns.adobe.com/mxml/2009"
+	xmlns:mx="library://ns.adobe.com/flex/mx"
+	xmlns:s="library://ns.adobe.com/flex/spark"
+	horizontalAlign="center" verticalAlign="middle">
+	<fx:Metadata>
+		[Event(name="selectableChange",type="flash.events.Event")]
+	</fx:Metadata>
+
+	<fx:Script>
+		<![CDATA[
+			import assets.img.com.yusukekamiyamane.p.FugueIcons;
+
+			import de.karfau.parallelpaint.core.elements.ISelectable;
+			public static const SELECTABLE_CHANGE_EVENT:String = "selectableChange";
+
+			private var _selectable:ISelectable;
+
+			[Bindable]
+			private var selector:String;
+
+			[Bindable(event="selectableChange")]
+			public function get selectable ():ISelectable {
+				return _selectable;
+			}
+
+			public function set selectable (value:ISelectable):void {
+				if (_selectable != value) {
+					_selectable = value;
+					dispatchEvent(new Event(SELECTABLE_CHANGE_EVENT));
+				}
+				update();
+			}
+
+			public function update ():void {
+				if (_selectable) {
+					label.text = _selectable.selector;
+					label.invalidateSize();
+					x = _selectable.center.x - 8;
+					y = _selectable.center.y - 8;
+					invalidateParentSizeAndDisplayList();
+				}
+			}
+		]]>
+	</fx:Script>
+
+	<mx:Image source="{FugueIcons.foreignSelection}"/>
+	<s:Label id="label" minWidth="40"/>
+	<!--<mx:Image source="{FugueIcons.foreignSelection}"/>-->
+</s:HGroup>
