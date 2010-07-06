@@ -1,0 +1,33 @@
+ParalellPaint
+- Paint for the browser
+- drawing objects instead of painnting with brushes
+- just start: no registration required for painting
+- like a wiki: every registered user can collaborate
+- multi-user: registered users can edit a painting in paralell
+- the drawing elements have the following editable attributes:
+	position, color(fill/stroke), alpha(fill/stroke), stroke-width, existance ;)
+- each drawing has its own url for sharing
+- PNG-/JPG-export
+- posibility to take snapshots from a drawing that are not editable
+- more to come ... ?
+
+The project was developed by 
+Chr. Bewernitz (alias karfau, mainly client, http://github.com/karfau/parallelpaint-client) 
+and A. Semt (mainly server, http://github.com/karfau/parallelpaint-server)
+for Multi Media Engeneering 2 @ Beuth Hochschule für Technik Berlin in summer term 2010
+
+In its current state ParalellPaint is a prototype and should not be used productive.
+Before having a final version there will have to be a lot of improvements 
+regarding performance and elegance of the already implemented features, 
+primarily in the server-side of the project.
+
+Details about the client:
+- ActionScript3 (using FlashPlayer 10-features)
+- Flex4 for GUI, remoting and messaging
+- as3-signals v0.6 http://github.com/robertpenner/as3-signals
+- Robotlegs v1.0.3 http://www.robotlegs.org/
+- SWFAddress 2.4 http://www.asual.com/swfaddress/
+- Parsley Spicelib(core,reflect,xml) v2.2.2 http://www.spicefactory.org/parsley/
+- my own small libs: as3-abstract v0.2, as3-typed-cookies v0.2, flexlogplus, as3-service-interface.
+	(those were developed while building the app, they will all be available here soon)
+using Flash Builder 4 with a big bunch of plugins
